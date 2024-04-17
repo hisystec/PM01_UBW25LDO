@@ -14,7 +14,7 @@ void setup() {
     PM01.set_vin_mode(PM01_VIN_MODE_AUTO);
 
     // set Battery charge enable (default disabled)
-    PM01.set_charge_setting(PM01_CHARGE_ENABLE);
+    PM01.set_charge_setting(PM01_BATTERY_CHARGE_ENABLE);
 
     // put your code here:
 
@@ -23,7 +23,7 @@ void setup() {
 
     // If the battery is charging, stop it to reduce charging noise.
     if (PM01.get_battery_state() == PM01_BATTERY_CHARGING) {
-      PM01.set_charge_setting(PM01_CHARGE_DISABLE);
+      PM01.set_charge_setting(PM01_BATTERY_CHARGE_DISABLE);
     }
 
     // put your analog measurement code here:
@@ -32,7 +32,7 @@ void setup() {
 
 
     // set Battery charge enable
-    PM01.set_charge_setting(PM01_CHARGE_ENABLE);
+    PM01.set_charge_setting(PM01_BATTERY_CHARGE_ENABLE);
 
     // into the sleep 
     //PM01.sleep();

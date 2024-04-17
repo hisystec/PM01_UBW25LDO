@@ -112,13 +112,6 @@ uint8_t PM01_UBW25LDO::change_address(uint8_t newAddress) {
 //
 // request
 //
-    uint8_t get_battery_charge_state();
-    uint8_t get_battert_state();
-    float get_vin_voltage();
-    float get_battery_voltage();
-    float get_vin_threshold();
-    float get_battery_detect_threshold();
-    uint8_t get_i2c_address();
 
 // Get the power module state.
 uint8_t PM01_UBW25LDO::get_state() {
@@ -198,7 +191,7 @@ uint8_t PM01_UBW25LDO::_write_byte(uint8_t _command, uint8_t value) {
     _i2cPort->write(value);
     _i2cPort->endTransmission();
 
-    _i2cPort->requestFrom(_address, 1);
+    _i2cPort->requestFrom(_address, 1, 1);
     status = _i2cPort->read();
     return status;
 }
@@ -220,7 +213,7 @@ uint8_t PM01_UBW25LDO::_write_word(uint8_t _command, uint16_t value) {
     _i2cPort->write(V.L);
     _i2cPort->endTransmission();
 
-    _i2cPort->requestFrom(_address, 1);
+    _i2cPort->requestFrom(_address, 1, 1);
     status = _i2cPort->read();
 
     _i2cPort->beginTransmission(_address);
@@ -228,7 +221,7 @@ uint8_t PM01_UBW25LDO::_write_word(uint8_t _command, uint16_t value) {
     _i2cPort->write(V.H);
     _i2cPort->endTransmission();
 
-    _i2cPort->requestFrom(_address, 1);
+    _i2cPort->requestFrom(_address, 1, 1);
     status = _i2cPort->read();
 
     return status;
@@ -240,7 +233,7 @@ uint8_t PM01_UBW25LDO::_read_byte(uint8_t _command) {
     _i2cPort->write(_command);
     _i2cPort->endTransmission();
 
-    _i2cPort->requestFrom(_address, 1);
+    _i2cPort->requestFrom(_address, 1, 1);
     uint8_t status = _i2cPort->read();
     return status;
 }
@@ -260,14 +253,14 @@ uint16_t PM01_UBW25LDO::_read_word(uint8_t _command) {
     _i2cPort->write(_command);
     _i2cPort->endTransmission();
 
-    _i2cPort->requestFrom(_address, 1);
+    _i2cPort->requestFrom(_address, 1, 1);
     V.L = _i2cPort->read();
 
     _i2cPort->beginTransmission(_address);
     _i2cPort->write(_command+1);
     _i2cPort->endTransmission();
 
-    _i2cPort->requestFrom(_address, 1);
+    _i2cPort->requestFrom(_address, 1, 1);
     V.H = _i2cPort->read();
 
     return V.value;
