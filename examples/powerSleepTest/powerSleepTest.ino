@@ -1,4 +1,4 @@
-#include "PM01_UBW25LDO.h"
+#include <PM01_UBW25LDO.h>
 
 #define PowerModuleAddress 0x08
 
@@ -6,6 +6,7 @@ PM01_UBW25LDO PM01(PowerModuleAddress);
 
 uint8_t state;
 uint8_t battery_state;
+uint8_t battery_charge_state;
 uint8_t vinMode;
 
 void PM01_print_state() {
@@ -54,6 +55,18 @@ void PM01_print_VIN_mode() {
       break;
     case PM01_VIN_MODE_ENABLE:
       Serial.println("Enable");
+      break;
+  }
+}
+
+void PM01_print_battery_charge_state() {
+  battery_charge_state = PM01.get_battery_charge_state();
+  switch(battery_charge_state) {
+    case 0:
+      Serial.println("Battery charging");
+      break;
+    case 1:
+      Serial.println("Battery discharging");
       break;
   }
 }
@@ -141,6 +154,14 @@ void PM01_print_BATDetect_threshold_voltage() {
   Serial.println(" [V]");
 }
 
+void PM01_print_delay_time() {
+  uint8_t dt;
+  dt = PM01.get_delay_time();
+  Serial.print("Delay time is: ");
+  Serial.print(dt);
+  Serial.println(" [ms]");
+}
+
 void setup()
 {
 
@@ -161,12 +182,15 @@ void setup()
   PM01.set_startup_charge_setting(PM01_BATTERY_CHARGE_DISABLE);
   PM01.set_vin_threshold(4.5);
   PM01.set_battery_detect_threshold(4.23);
+  PM01.set_delay_time(250);
   PM01_print_state();
-  PM01_print_battery_state();
-  PM01_print_VIN_state();
   PM01_print_VIN_threshold_voltage();
   PM01_print_BATDetect_threshold_voltage();
   PM01_print_VIN_mode();
+  PM01_print_charge_setting();
+  PM01_print_delay_time();
+  PM01_print_VIN_state();
+  PM01_print_battery_state();
 
   delay(5000);
   
@@ -174,7 +198,7 @@ void setup()
   //PM01.setVinMode(PM01_POWER_VIN_MODE_ENABLE);
   
   // deep sleep
-  //PM01.deep_sleep();
+  PM01.deep_sleep();
 
   // sleep
   //PM01.sleep();
